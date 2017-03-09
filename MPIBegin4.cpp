@@ -19,11 +19,11 @@ void Solve()
 	if (rank % 2 == 0) {
 		int n;
 		pt >> n;
-		pt << (n * 2);
+		pt << n * 2;
+		return;
 	}
-	else {
-		double n;
-		pt >> n;
-		pt << (n * 2);
-	}
+	
+	double n;
+	pt >> n;
+	pt << n * 2;
 }
