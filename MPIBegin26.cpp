@@ -17,9 +17,10 @@ void Solve()
 	double num;
 	int tag;
 
-	if (rank == 0)
+	if (!rank)
 	{
-		for (auto i = 1; i < size; i++) {
+		for (auto i = 1; i < size; i++)
+    {
 			MPI_Recv(&num, 1, MPI_DOUBLE, MPI_ANY_SOURCE, i, MPI_COMM_WORLD, &status);
 			pt << num;
 		}

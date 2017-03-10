@@ -17,7 +17,8 @@ void Solve()
 	const auto count = 4;
 	int nums[count];
 
-	if (rank == 0) {
+	if (!rank)
+  {
 		for (auto i = 1; i < size; i++) {
 			MPI_Recv(&nums, count, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
 

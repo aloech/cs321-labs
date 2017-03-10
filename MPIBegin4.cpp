@@ -13,16 +13,17 @@ void Solve()
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-	if (rank == 0) 
+	if (!rank)
 		return;
 
-	if (rank % 2 == 0) {
+	if (!(rank % 2))
+  {
 		int n;
 		pt >> n;
 		pt << n * 2;
 		return;
 	}
-	
+
 	double n;
 	pt >> n;
 	pt << n * 2;

@@ -22,12 +22,12 @@ void Solve()
 	for (auto i = 0; i < n; i++)
 		pt >> nums[i];
 
-	auto dest = rank % 2 == 0 ? rank + 1 : rank - 1;
+	auto dest = !(rank % 2) ? rank + 1 : rank - 1;
 	int recv_n;
-	MPI_Sendrecv(&n, 1, MPI_INT, dest, 0, 
-		&recv_n, 1, MPI_INT, dest, 0, MPI_COMM_WORLD, &status);
-	MPI_Sendrecv(&nums, n, MPI_DOUBLE, dest, 0, 
-		&nums, recv_n, MPI_DOUBLE, dest, 0, MPI_COMM_WORLD, &status);
+	MPI_Sendrecv(&n, 1, MPI_INT, dest, 0,
+		           &recv_n, 1, MPI_INT, dest, 0, MPI_COMM_WORLD, &status);
+	MPI_Sendrecv(&nums, n, MPI_DOUBLE, dest, 0,
+		           &nums, recv_n, MPI_DOUBLE, dest, 0, MPI_COMM_WORLD, &status);
 
 	for (auto i = 0; i < recv_n; i++)
 		pt << nums[i];

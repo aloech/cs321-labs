@@ -19,11 +19,12 @@ void Solve()
 
 	double sum = 0;
 
-	for (auto i = 0; i < n; ++i) {
+	for (auto i = 0; i < n; ++i)
+  {
 		double val;
 		pt >> val;
 		sum += val;
 	}
 
-	pt << (rank % 2 == 0 ? sum : sum / n);
+	pt << (!(rank % 2) ? sum : sum / n);
 }
