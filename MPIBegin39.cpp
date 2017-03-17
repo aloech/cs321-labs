@@ -39,4 +39,9 @@ void Solve()
 
 	for (auto i = 0; i < recv_count; ++i)
 		pt << recv_buf[i];
+
+	delete[] nums;
+	delete[] recv_buf;
+	delete[] send_counts;
+	delete[] displs;
 }

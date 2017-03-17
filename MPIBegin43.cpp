@@ -22,4 +22,7 @@ void Solve()
 
 	for (auto i = 0; i < size; ++i)
 		pt << buf[i];
+
+	delete[] nums;
+	delete[] buf;
 }

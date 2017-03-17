@@ -28,4 +28,8 @@ void Solve()
 	if (!rank)
 		for (auto i = 0; i < nums_size; ++i)
 			pt << buf[i];
+
+	delete[] nums;
+	delete[] buf;
+
 }

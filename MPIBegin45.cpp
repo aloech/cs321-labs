@@ -40,4 +40,11 @@ void Solve()
 
 	for (auto i = 0; i < buf_size; ++i)
 		pt << buf[i];
+
+	delete[] nums;
+	delete[] buf;
+	delete[] send_counts;
+	delete[] send_displs;
+	delete[] recv_counts;
+	delete[] recv_displs;
 }
