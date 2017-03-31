@@ -2,6 +2,7 @@
 #pragma hdrstop
 #include "mpi.h"
 #include "pt4.h"
+
 void Solve()
 {
     Task("MPIBegin72");
@@ -39,7 +40,7 @@ void Solve()
 
 	MPI_Allgather(send_buf, count, MPI_DOUBLE, recv_buf, count, MPI_DOUBLE, comm);
 
-	for (auto i = 0; i < recv_count; i++)
+	for (auto i = 0; i < recv_count; ++i)
 		pt << recv_buf[i];
 
 	MPI_Group_free(&all);

@@ -34,7 +34,6 @@ void Solve()
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-	
 	MPI_Datatype MPI_TRIAD;
 	auto blocklens = new int[COUNT] { 1, 1, 1 };
 	auto triad_displs = new MPI_Aint[COUNT]
@@ -47,7 +46,7 @@ void Solve()
 	MPI_Type_struct(COUNT, blocklens, triad_displs, oldtypes, &MPI_TRIAD);
 	MPI_Type_commit(&MPI_TRIAD);
 
-	auto send_buf = new Triad[rank]; 
+	auto send_buf = new Triad[rank];
 	for (auto i = 0; i < rank; ++i)
 		pt >> send_buf[i];
 
@@ -58,24 +57,24 @@ void Solve()
 
 	if (!rank)
 	{
-		for (auto i = 0; i < size; ++i)
-			recv_buf_size += i;
-
-		recv_buf = new Triad[recv_buf_size];
 		recv_counts = new int[size];
 		displs = new int[size];
 
-		for (auto i = 0; i < size; ++i) 
+		for (auto i = 0; i < size; ++i)
 		{
+			recv_buf_size += i;
 			recv_counts[i] = i;
-			displs[i] = !i ? 0 : displs[i - 1] + recv_counts[i - 1]; 
+			displs[i] = !i ? 0 : displs[i - 1] + recv_counts[i - 1];
 		}
+
+		recv_buf = new Triad[recv_buf_size];
 	}
 
-	MPI_Gatherv(send_buf, rank, MPI_TRIAD, recv_buf, recv_counts, displs, MPI_TRIAD, 0, MPI_COMM_WORLD);
+	MPI_Gatherv(send_buf, rank, MPI_TRIAD, 
+		        recv_buf, recv_counts, displs, MPI_TRIAD, 0, MPI_COMM_WORLD);
 
 	if (!rank)
-		for (auto i = 0; i < recv_buf_size; ++i) 
+		for (auto i = 0; i < recv_buf_size; ++i)
 			pt << recv_buf[i];
 
 	delete[] blocklens;

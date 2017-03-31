@@ -23,10 +23,12 @@ void Solve()
 	double send_buf;
 	pt >> send_buf;
 
+  auto count = 1;
 	double recv_buf;
-	MPI_Reduce(&send_buf, &recv_buf, 1, MPI_DOUBLE, is_even ? MPI_MAX : MPI_MIN, 0, comm);
+	MPI_Reduce(&send_buf, &recv_buf, count, MPI_DOUBLE,
+       is_even ? MPI_MAX : MPI_MIN, 0, comm);
 
-	if (!rank) 
+	if (!rank)
 		pt << recv_buf;
 
 	MPI_Comm_free(&comm);

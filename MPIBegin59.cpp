@@ -5,18 +5,18 @@
 
 const auto COUNT = 3;
 
-struct Triad 
+struct Triad
 {
 	int fst, snd, thd;
 
-	Triad() : fst(0), snd(0), thd(0) {} 
+	Triad() : fst(0), snd(0), thd(0) {}
 
-	friend PTIO& operator<< (PTIO& p, Triad const &t) 
+	friend PTIO& operator << (PTIO& p, Triad const &t)
 	{
 		return p << t.fst << t.snd << t.thd;
 	}
 
-	friend PTIO& operator >> (PTIO& p, Triad &t) 
+	friend PTIO& operator >> (PTIO& p, Triad &t)
 	{
 		return p >> t.fst >> t.snd >> t.thd;
 	}
@@ -33,13 +33,14 @@ void Solve()
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-	MPI_Aint triad_displs[COUNT];
-	triad_displs[0] = offsetof(Triad, fst);
-	triad_displs[1] = offsetof(Triad, snd);
-	triad_displs[2] = offsetof(Triad, thd);
-
 	MPI_Datatype MPI_TRIAD;
 	auto blocklens = new int[COUNT] { 1, 1, 1 };
+	auto triad_displs = new MPI_Aint[COUNT]
+	{
+		offsetof(Triad, fst),
+		offsetof(Triad, snd),
+		offsetof(Triad, thd)
+	};
 	auto oldtypes = new MPI_Datatype[COUNT] { MPI_INT, MPI_INT, MPI_INT };
 	MPI_Type_struct(COUNT, blocklens, triad_displs, oldtypes, &MPI_TRIAD);
 	MPI_Type_commit(&MPI_TRIAD);
@@ -61,7 +62,7 @@ void Solve()
 		displs = new int[size];
 		for (auto i = 0; i < size; ++i)
 		{
-			send_counts[i] = !i ? 0 : recv_count;  
+			send_counts[i] = !i ? 0 : recv_count;
 			displs[i] = i == 0 || i == 1 ? 0 : displs[i - 1] + send_counts[i];
 		}
 	}
@@ -69,12 +70,11 @@ void Solve()
 	MPI_Scatterv(send_buf, send_counts, displs, MPI_TRIAD, recv_buf,
 		recv_count, MPI_TRIAD, 0, MPI_COMM_WORLD);
 
-	if (!rank)
-		return;
-
-	pt << recv_buf[0];
+	if (rank)
+		pt << recv_buf[0];
 
 	delete[] blocklens;
+	delete[] triad_displs;
 	delete[] oldtypes;
 	delete[] recv_buf;
 	delete[] send_counts;
